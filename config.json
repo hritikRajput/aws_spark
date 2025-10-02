@@ -1,0 +1,47 @@
+{
+    "aws_region": "us-east-1",
+    "hana": {
+        "secret_name": "hana/credentials",
+        "schema": "SALES",
+        "table": "ORDERS",
+        "partition_col": "ORDER_DATE",
+        "incremental_col": "LAST_UPDATED"
+    },
+    "s3": {
+        "staging_prefix": "s3://mybucket/staging/",
+        "partition_filesize_mb": 150
+    },
+    "snowflake": {
+        "secret_name": "snowflake/connection",
+        "staging_table": "RAW.ORDERS_TEMP",
+        "target_table": "DWH.ORDERS",
+        "key_cols": "ORDER_ID",
+        "update_cols": "AMOUNT,STATUS,LAST_UPDATED"
+    },
+    "load_type": "incremental",
+    "last_run_date": "2023-10-01"
+}
+
+"""
+aws_region → region where Secrets Manager + S3 bucket live.
+
+hana.secret_name → AWS Secrets Manager key that stores HANA connection creds (JSON).
+
+hana.schema / hana.table → source SAP HANA schema and table.
+
+s3.staging_prefix → where parquet files are written before Snowflake load.
+
+snowflake.secret_name → AWS Secrets Manager key that stores Snowflake creds.
+
+snowflake.staging_table → raw/staging table in Snowflake.
+
+snowflake.target_table → final business table in Snowflake.
+
+snowflake.key_cols → column(s) used for join in MERGE (primary keys).
+
+snowflake.update_cols → list of columns updated when matched.
+
+load_type → "full" or "incremental".
+
+last_run_date → required only for incremental runs.
+"""

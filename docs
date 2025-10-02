@@ -1,0 +1,23 @@
+Step 1: Connecting to SAP HANA
+What you need:
+HANA JDBC driver (ngdbc.jar) for Spark.
+HANA host, port, username, password.
+The table name and schema you want to extract.
+Optional: incremental load key (like ORDER_DATE) if you want to extract only new/changed rows.
+PySpark environment to read HANA via JDBC.
+Key considerations:
+Partitioning: For large tables, use date or numeric partition column to parallelize reads.
+Security: Never hardcode passwords — either use environment variables or AWS Secrets Manager.
+File format: Parquet is preferred for efficiency, even if temporary, because Snowflake can read Parquet efficiently.
+
+Step 2: Loading into Snowflake using Snowpark
+What you need:
+Snowflake credentials: account, user, password, role, warehouse, database, schema.
+Snowpark Python library installed (snowflake-snowpark-python).
+Target Snowflake table: staging table first, then final table.
+POC could simply load into one staging table, optionally do MERGE/UPSERT into production table.
+
+Key considerations:
+For a POC, you could load directly from memory (PySpark DataFrame → Snowpark DataFrame → Snowflake) if table size is small.
+For large tables, staging in S3 is safer — Snowpark can do COPY INTO from S3.
+Logging for success/failure.
