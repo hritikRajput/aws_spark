@@ -88,7 +88,7 @@ TARGET_PREFIX = (
 # Approximate target file size (helps control number of Parquet files)
 TARGET_FILESIZE_MB = int(s3_cfg.get("partition_filesize_mb", 150)) * 1024 * 1024
 
-# Load Snowflake credentials from Secrets Manager.
+# Load Snowflake credentials from Secrets Manager
 sf_cfg = config["snowflake"]
 sf_creds = get_secret(sf_cfg["secret_name"])
 
